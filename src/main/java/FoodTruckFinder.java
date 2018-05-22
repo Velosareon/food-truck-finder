@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class FoodTruckFinder
 {
     private static String baseURL = "https://data.sfgov.org/resource/bbb8-hzi6.json";
-    private static DateTimeFormatter hourandminuteFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    private static DateTimeFormatter hourAndMinuteFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public static void main(String[] args)
     {
@@ -32,19 +32,28 @@ public class FoodTruckFinder
 
             for(int i=0; i<currentTruckPage.length(); i++)
             {
-                System.out.println(currentTruckPage.getJSONObject(i).get("applicant").toString());
+                System.out.printf("%s\n%s\n",
+                        "NAME: " + currentTruckPage.getJSONObject(i).get("applicant").toString(),
+                        "  ADDRESS: " + currentTruckPage.getJSONObject(i).get("location").toString());
             }
 
-            System.out.print("prompt: Next Page: [n] Quit: [q]: ");
-            if(scan.next().charAt(0) == 'q') {break;}
-            itemOffset = itemOffset + 10;
+            if(currentTruckPage.length() == 0)
+            {
+                System.out.println("No more food trucks to display.");
+            }
+            else
+            {
+                System.out.print("prompt: Next Page[n]: Quit[q]: ");
+                if(scan.next().charAt(0) == 'q') {break;}
+                itemOffset = itemOffset + 10;
+            }
         }
         while(currentTruckPage.length() != 0);
     }
 
     private static URL getURL(int itemOffset)
     {
-        LocalTime currentTime = LocalTime.parse(LocalTime.now().format(hourandminuteFormatter), hourandminuteFormatter);
+        LocalTime currentTime = LocalTime.parse(LocalTime.now().format(hourAndMinuteFormatter), hourAndMinuteFormatter);
 
         int itemsPerPage = 10;
         int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-1;
@@ -91,10 +100,5 @@ public class FoodTruckFinder
             System.out.println(e);
             return null;
         }
-    }
-
-    public static void printPage()
-    {
-
     }
 }
