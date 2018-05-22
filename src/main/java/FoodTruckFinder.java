@@ -1,5 +1,4 @@
 import org.json.JSONArray;
-
 import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.time.LocalTime;
@@ -17,7 +16,6 @@ import java.util.Scanner;
  */
 public class FoodTruckFinder
 {
-    private static String baseURL = "https://data.sfgov.org/resource/bbb8-hzi6.json";
     private static DateTimeFormatter hourAndMinuteFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public static void main(String[] args)
@@ -53,10 +51,10 @@ public class FoodTruckFinder
 
     private static URL getURL(int itemOffset)
     {
+        String baseURL = "https://data.sfgov.org/resource/bbb8-hzi6.json";
         LocalTime currentTime = LocalTime.parse(LocalTime.now().format(hourAndMinuteFormatter), hourAndMinuteFormatter);
-
-        int itemsPerPage = 10;
         int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-1;
+        int itemsPerPage = 10;
 
         String route =
                 MessageFormat.format(
